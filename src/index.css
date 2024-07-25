@@ -1,13 +1,26 @@
+html,
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.chart-c .recharts-legend-wrapper {
+  bottom: 30% !important;
+  max-width: 90% !important;
+  margin: 0px auto !important;
+}
+
+.row {
+  margin: 4px;
+  display: flex;
+  justify-content: center;
+  /* width: 100%; */
+  /* display: flex; */
+  /* flex-direction: row; */
+  /* justify-content: space-around; */
+}
+
+.row-s {
+  width: fit-content;
+  display: flex;
+  justify-content: space-between;
 }
