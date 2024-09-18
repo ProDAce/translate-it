@@ -132,6 +132,7 @@ function App() {
 
   return (
     <div className="App">
+      <h1>Translate-It</h1>
       <textarea value={text} onChange={e => setText(e.target.value)} placeholder={placeholder}></textarea>
       <div className="languagues-list">
         {listCheckBox()}

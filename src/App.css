@@ -17,6 +17,12 @@
   padding-bottom: 8px;
 }
 
+h1{
+  background: -webkit-linear-gradient(left, darkblue, darkorchid);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 .languagues-list {
   margin: auto;
   width: fit-content;
