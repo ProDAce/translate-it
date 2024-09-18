@@ -7,13 +7,31 @@ import AppService from './service/app-services';
 
 function App() {
   const [languagesSelected, setLanguagesSelected] = useState(null);
-  const [translatedTexts, setTranslatedTexts] = useState({});
+  const [translatedTexts, setTranslatedTexts] = useState(
+    {
+      // "it": {
+      //   "name": "come ti chiami?"
+      // },
+      // "de": {
+      //   "name": "wie heißt du?"
+      // },
+      // "pt": {
+      //   "name": "qual o seu nome?"
+      // },
+      // "fr": {
+      //   "name": "quel est ton nom ?"
+      // },
+      // "es": {
+      //   "name": "¿cómo te llamas?"
+      // }
+    }
+  );
   const [text, setText] = useState("");
 
   useEffect(() => {
     const temp = {};
     LangaugesList.forEach(obj => {
-      temp[obj] = true
+      temp[obj.id] = true
     })
     setLanguagesSelected(temp);
   }, [])
@@ -28,14 +46,14 @@ function App() {
       return LangaugesList.map((obj, index) => {
         return (
           <div className="row" key={index}>
-            <label htmlFor={obj}>{obj}</label>
+            <label htmlFor={"ll_"+obj.id}>{obj.name + "(" + obj.id + ")"}</label>
             <input
               type="checkbox"
-              id={obj}
-              checked={languagesSelected[obj]}
+              id={"ll_"+obj.id}
+              checked={languagesSelected[obj.id]}
               onChange={(e) => {
                 setLanguagesSelected(prevData => {
-                  return { ...prevData, [obj]: !languagesSelected[obj] }
+                  return { ...prevData, [obj.id]: !languagesSelected[obj.id] }
                 })
               }} />
           </div>
@@ -51,9 +69,10 @@ function App() {
     ];
 
     Object.keys(translatedTexts).forEach(obj => {
+      const t = LangaugesList.find(x => x.id === obj);
       renderData.push(
-        <div className="translated-text">
-          <h3>{obj}</h3>
+        <div className="translated-text" key={obj}>
+          <h3>{t.name + "(" + t.id + ")"}</h3>
           <pre>{JSON.stringify(translatedTexts[obj], null, 2)}</pre>
         </div>
       )
@@ -86,25 +105,9 @@ function App() {
         textList.push(jsonText[obj])
       })
 
-      // const TEST = {
-      //   "fr": {
-      //     "roof2": "Pour le toit 2.",
-      //     "roof1": "Pour toit simple"
-      //   },
-      //   "pt": {
-      //     "roof2": "Para telhado 2.",
-      //     "roof1": "Para telhado único"
-      //   },
-      //   "de": {
-      //     "roof2": "Für Dach 2.",
-      //     "roof1": "Für Einzeldach"
-      //   }
-      // }
-      // setTranslatedTexts(TEST)
-
       LangaugesList.forEach(obj => {
-        if (languagesSelected[obj]) {
-          AppService.translateText(textList, obj).then(response => {
+        if (languagesSelected[obj.id]) {
+          AppService.translateText(textList, obj.id).then(response => {
             console.log(obj);
             // console.log(handleResponse(response.data.data.translations, keys));
             let res = response.data.data.translations;
@@ -114,18 +117,22 @@ function App() {
               temp[keys[i]] = res[i].translatedText
             }
             setTranslatedTexts(prevData => {
-              return { ...prevData, [obj]: temp }
+              return { ...prevData, [obj.id]: temp }
             })
           })
         }
       })
     } catch (error) {
       console.log(error);
+      alert("Not valid JSON")
     }
   }
+
+  const placeholder = 'Input valid JSON text to generate the values of each keys for the selected languages.\n\nExample:-\n\n{\n"name": "What is your name?"\n}'
+
   return (
     <div className="App">
-      <textarea value={text} onChange={e => setText(e.target.value)}></textarea>
+      <textarea value={text} onChange={e => setText(e.target.value)} placeholder={placeholder}></textarea>
       <div className="languagues-list">
         {listCheckBox()}
       </div>
